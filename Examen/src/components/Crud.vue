@@ -3,7 +3,6 @@
     <Navbar />
 
     <div class="container mt-4">
-      <!-- Aquí se incluirá el componente Tabla -->
       <AgregarCliente @clientAdded="fetchData" />
     <div class="container mt-4">
 
@@ -18,8 +17,8 @@
 
 <script>
 import Navbar from './Navbar.vue';
-import Tabla from './Tabla.vue'; // Asegúrate de que la ruta sea correcta
-import AgregarCliente from './AgregarCliente.vue'; // Asegúrate de que la ruta sea correcta
+import Tabla from './Tabla.vue'; 
+import AgregarCliente from './AgregarCliente.vue'; 
 
 export default {
   components: {
