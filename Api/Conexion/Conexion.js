@@ -1,7 +1,7 @@
 const { Sequelize } = require('sequelize');
 require('dotenv').config(); // Cargar variables de entorno desde el archivo .env
 console.log('Variables de entorno cargadas desde .env');
-// Cargar variables de entorno desde el archivo .env
+
 
 // Agregar logs para verificar que las variables de entorno se están cargando
 console.log('DB_NAME:', process.env.DB_NAME);

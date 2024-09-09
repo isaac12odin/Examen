@@ -1,79 +1,26 @@
+/* global.css */
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-.card {
-  padding: 2em;
-}
-
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+    --primary-bg-light: #007bff;
+    --primary-bg-dark: #ffffff;
+    --text-light: #ffffff;
+    --text-dark: #000000;
+    --btn-light-bg: #ffffff;
+    --btn-light-text: #007bff;
+    --btn-light-hover-bg: #e2e6ea;
+    --btn-light-hover-text: #0056b3;
   }
-  a:hover {
-    color: #747bff;
+  
+  [data-theme='dark'] {
+    --primary-bg: var(--primary-bg-dark);
+    --text-color: var(--text-light);
+    --btn-light-bg: var(--btn-light-bg);
+    --btn-light-text: var(--btn-light-text);
+    --btn-light-hover-bg: var(--btn-light-hover-bg);
+    --btn-light-hover-text: var(--btn-light-hover-text);
   }
-  button {
-    background-color: #f9f9f9;
+  
+  [data-theme='light'] {
+    --primary-bg: var(--primary-bg-light);
+    --text-color: var(--text-dark);
   }
-}
+  

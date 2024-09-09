@@ -1,164 +1,77 @@
 <template>
-    <div class="login-container">
-      <div class="login-card">
-        <h2 class="login-title">Examen Isaac</h2>
-        <form @submit.prevent="login" class="login-form">
-          <div class="form-group">
-            <label for="username">Correo</label>
-            <input
-              id="username"
-              v-model="username"
-              type="text"
-              placeholder="Introduce tu correo"
-              required
-            />
-          </div>
-          <div class="form-group password-group">
-            <label for="password">Contraseña</label>
-            <div class="password-container">
-              <input
-                id="password"
-                v-model="password"
-                :type="showPassword ? 'text' : 'password'"
-                placeholder="Introduce tu contraseña"
-                required
-              />
-              <button type="button" @click="togglePasswordVisibility" class="password-toggle">
-                <span v-if="showPassword">🙉</span>
-                <span v-else>🙈</span>
-              </button>
-            </div>
-          </div>
-          <button type="submit" class="login-button">Iniciar Sesión</button>
-        </form>
+  <div :class="['d-flex', 'align-items-center', 'justify-content-center', 'min-vh-100', isDarkMode ? 'bg-dark' : 'bg-light']">
+    <div class="card p-4 shadow-lg" style="max-width: 400px;">
+      <h2 class="card-title mb-4 text-center">Por favor inicia sesión</h2>
+      <form @submit.prevent="login">
+        <div class="mb-3">
+          <label for="username" class="form-label">Correo</label>
+          <input id="username" v-model="username" type="text" placeholder="Introduce tu correo" required class="form-control" />
+        </div>
+        <div class="mb-3 position-relative">
+          <label for="password" class="form-label">Contraseña</label>
+          <input id="password" v-model="password" :type="showPassword ? 'text' : 'password'" placeholder="Introduce tu contraseña" required class="form-control" />
+          <button type="button" @click="togglePasswordVisibility" class="btn position-absolute top-50 end-0 translate-middle-y">
+            <i :class="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+          </button>
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Iniciar Sesión</button>
+      </form>
+      <div class="theme-toggle mt-3 d-flex align-items-center">
+        <span>{{ isDarkMode ? 'Modo Claro' : 'Modo Oscuro' }}</span>
+        <label class="switch">
+          <input type="checkbox" v-model="isDarkMode" />
+          <span class="slider round"></span>
+        </label>
       </div>
     </div>
-  </template>
-  
-  <script setup>
-  import { ref } from 'vue';
-  import axios from 'axios';
-  import { useRouter } from 'vue-router';
-  
-  const username = ref('');
-  const password = ref('');
-  const showPassword = ref(false);
-  const router = useRouter();
-  
-  async function login() {
-    try {
-      const response = await axios.post('http://localhost:3000/api/login', {
-        Correo: username.value,
-        Contrasena: password.value
-      });
-  
-      const { token, id } = response.data;
-  
-      if (token && id) {
-        // Guarda el token en el sessionStorage
-        sessionStorage.setItem('jwt', token);
-        sessionStorage.setItem('userId', id);
-  
-        // Redirige al usuario al CRUD
-        router.push('/crud');
-      }
-    } catch (error) {
-      console.error('Error de inicio de sesión:', error);
+  </div>
+</template>
+
+<script setup>
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
+import { useRouter } from 'vue-router';
+
+const username = ref('');
+const password = ref('');
+const showPassword = ref(false);
+const isDarkMode = ref(false);
+const router = useRouter();
+
+const login = async () => {
+  try {
+    const { data } = await axios.post('http://localhost:3000/api/login', { Correo: username.value, Contrasena: password.value });
+    if (data.token) {
+      sessionStorage.setItem('jwt', data.token);
+      sessionStorage.setItem('userId', data.id);
+      router.push('/crud');
     }
+  } catch (error) {
+    console.error('Error de inicio de sesión:', error);
   }
-  
-  function togglePasswordVisibility() {
-    showPassword.value = !showPassword.value;
-  }
-  </script>
-  
-  
-  <style scoped>
-  .login-container {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(135deg, #f5f5f5 0%, #e3e3e3 100%);
-  }
-  
-  .login-card {
-    width: 100%;
-    max-width: 400px;
-    padding: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    border-radius: 8px;
-    background-color: white;
-    text-align: center;
-  }
-  
-  .login-title {
-    margin-bottom: 20px;
-    font-weight: bold;
-    font-size: 1.5rem;
-  }
-  
-  .login-form {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .form-group {
-    margin-bottom: 16px;
-  }
-  
-  label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: bold;
-  }
-  
-  input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-  }
-  
-  input:focus {
-    border-color: #007bff;
-    outline: none;
-  }
-  
-  .password-group {
-    position: relative;
-  }
-  
-  .password-container {
-    display: flex;
-    align-items: center;
-  }
-  
-  .password-toggle {
-    position: absolute;
-    right: 10px;
-    top: 70%;
-    transform: translateY(-50%);
-    border: none;
-    background: transparent;
-    cursor: pointer;
-    font-size: 18px;
-  }
-  
-  .login-button {
-    width: 100%;
-    padding: 10px;
-    border: none;
-    border-radius: 4px;
-    background-color: #007bff;
-    color: white;
-    font-weight: bold;
-    cursor: pointer;
-  }
-  
-  .login-button:hover {
-    background-color: #0056b3;
-  }
-  </style>
-  
+};
+
+const togglePasswordVisibility = () => showPassword.value = !showPassword.value;
+
+onMounted(() => {
+  if (sessionStorage.getItem('jwt')) router.push('/crud');
+});
+</script>
+
+<style scoped>
+.card { border-radius: 10px; background: var(--card-bg); transition: transform 0.3s; }
+.card:hover { transform: scale(1.03); }
+.form-control { border-radius: 8px; border-color: var(--input-border); color: var(--input-text); background: var(--input-bg); padding: 1rem; }
+.btn-primary { background-color: var(--primary); border-color: var(--primary); transition: background-color 0.3s; }
+.btn-primary:hover { background-color: var(--primary-dark); border-color: var(--primary-dark); }
+.toggle-password-btn i { color: var(--icon-color); }
+.theme-toggle span { margin-right: 0.75rem; font-size: 1rem; color: var(--icon-color); }
+.switch { position: relative; display: inline-block; width: 60px; height: 34px; }
+.switch input { opacity: 0; width: 0; height: 0; }
+.slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--input-border); transition: .4s; border-radius: 34px; }
+.slider:before { position: absolute; content: ""; height: 26px; width: 26px; border-radius: 50%; left: 4px; bottom: 4px; background-color: white; transition: .4s; }
+input:checked + .slider { background-color: var(--primary); }
+input:checked + .slider:before { transform: translateX(26px); }
+.bg-light { --card-bg: #ffffff; --input-border: #d1dace; --input-bg: #ffffff; --input-text: #000000; --icon-color: #000000; --primary: #46f171; --primary-dark: #000000; }
+.bg-dark { --card-bg: #4876a5; --input-border: #ffffff; --input-bg: #ffffff; --input-text: #000000; --icon-color: #ffffff; --primary: #092c61; --primary-dark: #0b5ed7; }
+</style>
